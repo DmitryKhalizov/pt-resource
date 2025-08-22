@@ -71,7 +71,8 @@ public class Personal_Trainer {
             joinColumns = @JoinColumn(name = "trainer_id"),
             inverseJoinColumns = @JoinColumn(name = "report_id")
     )
-    private Set<Report> reports = new HashSet<>();
+
+    private Set<TrainerReview> reports = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

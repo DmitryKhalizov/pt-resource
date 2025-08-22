@@ -18,6 +18,7 @@ public class PersonalTrainerDTOService {
         dto.setTrainerId(trainer.getTrainerId());
         dto.setProfileImage(trainer.getProfileImage());
         dto.setFirstName(trainer.getFirstName());
+        dto.setLastName(trainer.getLastName());
         dto.setNickname(trainer.getNickname());
         dto.setDescription(trainer.getDescription());
         dto.setCertification(trainer.getCertification());
@@ -26,18 +27,17 @@ public class PersonalTrainerDTOService {
         return dto;
     }
 
-    public PersonalTrainerDTO toEntity(PersonalTrainerDTO dto) {
+    public Personal_Trainer toEntity(PersonalTrainerDTO dto) {
         Personal_Trainer trainer = new Personal_Trainer();
-        trainer.setTrainerId(trainer.getTrainerId());
-        trainer.setProfileImage(trainer.getProfileImage());
-        trainer.setFirstName(trainer.getFirstName());
-        trainer.setNickname(trainer.getNickname());
-        trainer.setDescription(trainer.getDescription());
-        trainer.setCertification(trainer.getCertification());
-        trainer.setExperienceYears(trainer.getExperienceYears());
-        trainer.setStatus(trainer.getStatus());
+        trainer.setTrainerId(dto.getTrainerId());
+        trainer.setProfileImage(dto.getProfileImage());
+        trainer.setFirstName(dto.getFirstName());
+        trainer.setLastName(dto.getLastName());
+        trainer.setNickname(dto.getNickname());
+        trainer.setDescription(dto.getDescription());
+        trainer.setCertification(dto.getCertification());
+        trainer.setExperienceYears(dto.getExperienceYears());
+        trainer.setStatus(dto.getStatus());
         return trainer;
     }
-
-
 }

@@ -15,12 +15,11 @@ public class UserDTOService {
 
     public UserDTO toDTO(User user) {
         UserDTO dto = new UserDTO();
-        dto.setUserid(user.getUserid());
+        dto.setUserid(user.getUserId());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setNickname(user.getNickname());
-        dto.setEmail(user.getEmail());
-        dto.setPhone(user.getPhone());
+
         dto.setUserType(user.getUserType());
         dto.setCreatedAt(user.getCreatedAt());
         return dto;

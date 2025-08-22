@@ -22,6 +22,6 @@ public class Sports {
     private String name;
 
     @ManyToMany(mappedBy = "sports")
-    private Set<Personal_Trainer> trainers + new HashSet<>();
+    private Set<Personal_Trainer> trainers = new HashSet<>();
 }
 

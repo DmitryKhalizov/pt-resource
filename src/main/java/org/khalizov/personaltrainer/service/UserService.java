@@ -1,6 +1,7 @@
 package org.khalizov.personaltrainer.service;
 
 import org.khalizov.personaltrainer.model.User;
+import org.khalizov.personaltrainer.model.UserType;
 import org.khalizov.personaltrainer.repository.UserRepository;
 import org.khalizov.personaltrainer.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,12 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        if(user.getUserid() == null) {
-            int randomId;
-            do {
-                randomId = new Random().nextInt(Integer.MAX_VALUE);
-            } while (userRepository.existsById(randomId));
-            user.setUserid(randomId);
-        }
+
         return userRepository.save(user);
     }
 
     public User createUser(String firstName, String lastName, String nickname, String email, String passwordHash,
-                           String phone, Status userType ) {
+                           String phone, UserType userType ) {
         User user = new User();
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -46,12 +41,6 @@ public class UserService {
         user.setUserType(userType);
         user.setCreatedAt(java.time.LocalDateTime.now());
 
-        int randomId;
-        Random random = new Random();
-        do {
-            randomId = random.nextInt(Integer.MAX_VALUE);
-        } while (userRepository.existsById(randomId));
-        user.setUserid(randomId);
 
         return userRepository.save(user);
     }

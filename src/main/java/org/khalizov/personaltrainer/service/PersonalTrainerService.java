@@ -39,7 +39,7 @@ public class PersonalTrainerService {
     }
 
     public Optional<PersonalTrainerDTO> getTrainerDTOById(Integer id) {
-        return personalTrainerRepository.findAllById(id)
+        return personalTrainerRepository.findById(id)
                 .map(personalTrainerDTOService::toDTO);
     }
 
@@ -47,7 +47,7 @@ public class PersonalTrainerService {
         return personalTrainerRepository.save(trainer);
     }
 
-    public Personal_Trainer createTrainer(String bio, String nickname, Integer experienceYears, String certification, String profileImage) {
+
         public Personal_Trainer createTrainer(String bio, String nickname, Integer experienceYears, String certification, String profileImage) {
             Personal_Trainer personalTrainer = new Personal_Trainer();
             personalTrainer.setDescription(bio);
