@@ -20,8 +20,8 @@ public class TrainerReview {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "report_id")
-    private Integer reportId;
+    @Column(name = "review_id")
+    private Integer reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
