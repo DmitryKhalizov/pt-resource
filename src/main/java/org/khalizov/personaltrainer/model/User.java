@@ -32,7 +32,7 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", columnDefinition = "datetime")
     private LocalDateTime createdAt;
 
     @Column(name = "password_hash")

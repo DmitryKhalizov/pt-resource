@@ -37,7 +37,7 @@ public class TrainerReview {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", columnDefinition = "datetime", updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
