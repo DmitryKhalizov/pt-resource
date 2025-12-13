@@ -20,13 +20,16 @@ public class Price {
     @Column(name = "price_id")
     private Integer priceId;
 
-    @Column(name = "price_online")
-    private BigDecimal priceOnline;
+    @Column(name = "price_per_hour", nullable = false, precision = 10, scale = 2)
+    private BigDecimal pricePerHour;
 
-    @Column(name = "price_personal")
-    private BigDecimal pricePersonal;
+    @Column(name = "price_five_hours", nullable = false, precision = 10, scale = 2)
+    private BigDecimal priceFiveHours;
 
-    @Column(name = "discounts")
-    private String discounts;
+    @Column(name = "price_ten_hours", nullable = false, precision = 10, scale = 2)
+    private BigDecimal priceTenHours;
+
+    @Column(name = "special_price")
+    private String specialPrice;
 
 }

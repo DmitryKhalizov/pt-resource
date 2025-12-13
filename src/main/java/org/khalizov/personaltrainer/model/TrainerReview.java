@@ -29,7 +29,7 @@ public class TrainerReview {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id", nullable = false)
-    private Personal_Trainer trainer;
+    private PersonalTrainer trainer;
 
     @Column(name = "rating", nullable = false)
     private Integer rating;

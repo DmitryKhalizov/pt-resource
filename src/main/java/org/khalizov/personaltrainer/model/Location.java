@@ -8,14 +8,18 @@ import java.util.Set;
 
 @Entity
 @Table(name = "location")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = "trainers")
 public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "location_id")
+    @EqualsAndHashCode.Include
     private Integer locationId;
 
     @Column(name = "address")
@@ -24,13 +28,10 @@ public class Location {
     @Column(name = "city")
     private String city;
 
-    @Column(name = "country")
-    private String country;
-
     @Column(name = "name")
     private String name;
 
     @ManyToMany(mappedBy = "locations")
-    private Set<Personal_Trainer> trainers = new HashSet<>();
+    private Set<PersonalTrainer> trainers = new HashSet<>();
 }
 

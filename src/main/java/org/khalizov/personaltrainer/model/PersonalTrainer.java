@@ -7,13 +7,18 @@ import java.util.Set;
 
 @Entity
 @Table(name = "personal_trainer")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Personal_Trainer {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = {"users", "locations", "reports", "sports", "price"})
+public class PersonalTrainer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trainer_id")
+    @EqualsAndHashCode.Include
     private Integer trainerId;
 
     @Column(columnDefinition = "TEXT")
@@ -37,8 +42,8 @@ public class Personal_Trainer {
     @Column(name = "experience_years")
     private Integer experienceYears;
 
-    @Column(name = "certification")
-    private String certification;
+    @Enumerated(EnumType.STRING)
+    private Sport sport;
 
     @Column(name = "password_hash")
     private String password_hash;
@@ -49,7 +54,11 @@ public class Personal_Trainer {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "price_id", nullable = false, unique = true)
+    private Price price;
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "trainer_users",
         joinColumns = @JoinColumn(name = "trainer_id"),
@@ -57,7 +66,7 @@ public class Personal_Trainer {
     )
     private Set<User> users = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "trainer_locations",
         joinColumns = @JoinColumn(name = "trainer_id"),
@@ -65,16 +74,10 @@ public class Personal_Trainer {
     )
     private Set<Location> locations = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "trainer_reports",
-            joinColumns = @JoinColumn(name = "trainer_id"),
-            inverseJoinColumns = @JoinColumn(name = "report_id")
-    )
-
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<TrainerReview> reports = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "trainer_sports",
             joinColumns = @JoinColumn(name = "trainer_id"),

@@ -14,6 +14,7 @@ import java.util.Set;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Integer userId;
 
@@ -46,5 +47,5 @@ public class User {
     private Status status;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    private Set<Personal_Trainer> trainers = new HashSet<>();
+    private Set<PersonalTrainer> trainers = new HashSet<>();
 }
