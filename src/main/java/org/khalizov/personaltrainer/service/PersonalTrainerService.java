@@ -1,6 +1,7 @@
 package org.khalizov.personaltrainer.service;
 
 import org.khalizov.personaltrainer.model.Price;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.khalizov.personaltrainer.dto.PersonalTrainerCreateDTO;
 import org.khalizov.personaltrainer.dto.PersonalTrainerDTO;
@@ -32,6 +33,8 @@ public class PersonalTrainerService {
     private UserRepository userRepository;
     @Autowired
     private LocationRepository locationRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<PersonalTrainerDTO> getAllTrainers() {
@@ -76,6 +79,7 @@ public class PersonalTrainerService {
         trainer.setSport(dto.getSport());
         trainer.setExperienceYears(dto.getExperienceYears());
         trainer.setStatus(dto.getStatus() != null ? dto.getStatus() : Status.ACTIVE);
+        trainer.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
 
         Price price = new Price();
         price.setPricePerHour(dto.getPricePerHour());

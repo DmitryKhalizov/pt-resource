@@ -30,6 +30,11 @@ public class UserCreateDTO {
     @Size(min=2, max = 100)
     private String lastName;
 
+    @Schema(description = "Password for the user", example = "Password123", required = true)
+    @NotBlank
+    @Size(min = 3, max = 100)
+    private String password;
+
     @Schema(description = "Email for the user", example = "sleepy_joe@example.se", required = true)
     @Email
     @NotBlank
@@ -44,5 +49,7 @@ public class UserCreateDTO {
 
     @Schema(description = "Type of user", example = "CLIENT")
     private UserType userType;
+
+
 
 }

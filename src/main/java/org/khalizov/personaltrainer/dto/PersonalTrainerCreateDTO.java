@@ -29,6 +29,11 @@ public class PersonalTrainerCreateDTO {
     @Size(min=3, max = 50)
     private String lastName;
 
+    @Schema(description = "Password for the trainer", example = "password123", required = true)
+    @NotBlank
+    @Size(min = 8, max = 100)
+    private String password;
+
     @Schema(description = "Unique nickname for the trainer", example = "boxer", required = true)
     @NotBlank
     @Size(min=3, max = 50)

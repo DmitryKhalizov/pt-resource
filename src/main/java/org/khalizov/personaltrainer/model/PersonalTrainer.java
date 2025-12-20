@@ -46,7 +46,7 @@ public class PersonalTrainer {
     private Sport sport;
 
     @Column(name = "password_hash")
-    private String password_hash;
+    private String passwordHash;
 
     @Column(name = "phone")
     private String phone;

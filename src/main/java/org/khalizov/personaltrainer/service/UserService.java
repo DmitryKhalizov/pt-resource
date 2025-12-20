@@ -10,6 +10,7 @@ import org.khalizov.personaltrainer.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +26,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private UserDTOMapper userDTOMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UserDTO> getAllUsers() {
          return userRepository.findAll()
@@ -59,6 +62,7 @@ public class UserService {
         user.setCreatedAt(LocalDateTime.now());
         user.setStatus(dto.getStatus() != null ? dto.getStatus() : Status.ACTIVE);
         user.setUserType(dto.getUserType() != null ? dto.getUserType() : UserType.CLIENT);
+        user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
 
         try {
             User saved = userRepository.save(user);
