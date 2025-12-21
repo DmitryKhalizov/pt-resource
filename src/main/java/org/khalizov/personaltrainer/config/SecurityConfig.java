@@ -22,7 +22,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
             .authorizeHttpRequests(auth -> auth
                 // Public web
-                .requestMatchers("/", "/login/**", "/oauth2/**", "/error").permitAll()
+                .requestMatchers("/", "/home", "/login/**", "/oauth2/**", "/error").permitAll()
                 // Swagger
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
@@ -40,15 +40,16 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/", true)
+                .loginProcessingUrl("/login/perform")
+                .defaultSuccessUrl("/home", true)
                 .permitAll()
             )
             .oauth2Login(oauth2 -> oauth2
                 .loginPage("/login")
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/home", true)
                 .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
             )
-            .logout(logout -> logout.logoutSuccessUrl("/").permitAll());
+            .logout(logout -> logout.logoutSuccessUrl("/login?logout").permitAll());
 
         return http.build();
     }

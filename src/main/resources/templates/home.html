@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home - Personal Trainer</title>
+</head>
+<body>
+    <h1>Welcome, <span th:text="${user?.firstName} ?: 'User'">User</span>!</h1>
+    <p>Email: <span th:text="${user?.email}">N/A</span></p>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>

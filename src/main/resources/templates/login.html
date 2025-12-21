@@ -6,16 +6,23 @@
 <body>
     <h1>Login to Personal Trainer</h1>
 
-    <a href="/oauth2/authorization/google">
-        <button>Login with Google</button>
-    </a>
+    <div th:if="${param.error}">
+        <p style="color:red;">Invalid username or password.</p>
+    </div>
+    <div th:if="${param.logout}">
+        <p>You have been logged out.</p>
+    </div>
 
-    <a href="/oauth2/authorization/facebook">
-        <button>Login with Facebook</button>
-    </a>
+    <h2>Login with Email</h2>
+    <form method="post" th:action="@{/login/perform}">
+        <label>Email: <input type="email" name="username" required /></label><br/>
+        <label>Password: <input type="password" name="password" required /></label><br/>
+        <button type="submit">Login</button>
+    </form>
 
-    <a href="/oauth2/authorization/microsoft">
-        <button>Login with Microsoft</button>
-    </a>
+    <h2>Or login with:</h2>
+    <a href="/oauth2/authorization/google"><button>Google</button></a>
+    <a href="/oauth2/authorization/facebook"><button>Facebook</button></a>
+    <a href="/oauth2/authorization/microsoft"><button>Microsoft</button></a>
 </body>
 </html>
