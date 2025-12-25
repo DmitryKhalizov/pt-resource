@@ -44,7 +44,7 @@ public class PersonalTrainerService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<PersonalTrainerDTO> gerTrainerById(Integer id) {
+    public Optional<PersonalTrainerDTO> getTrainerById(Integer id) {
         return personalTrainerRepository.findById(id)
                 .map(personalTrainerDTOMapper);
     }

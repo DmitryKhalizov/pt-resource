@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import org.khalizov.personaltrainer.dto.PersonalTrainerCreateDTO;
 import org.khalizov.personaltrainer.dto.PersonalTrainerDTO;
 import org.khalizov.personaltrainer.mapper.PersonalTrainerDTOMapper;
-import org.khalizov.personaltrainer.model.PersonalTrainer;
 import org.khalizov.personaltrainer.model.Status;
 import org.khalizov.personaltrainer.service.PersonalTrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class PersonalTrainerController {
     public PersonalTrainerDTO getTrainerById(
             @Parameter(description = "Trainer id", required = true, example = "1")
             @PathVariable Integer id) {
-        return  personalTrainerService.gerTrainerById(id)
+        return  personalTrainerService.getTrainerById(id)
                 .orElseThrow(() -> new RuntimeException("Trainer not found"));
     }
 

@@ -1,6 +1,8 @@
 package org.khalizov.personaltrainer.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -18,6 +20,7 @@ public class User {
     @Column(name = "user_id")
     private Integer userId;
 
+    @Size(min = 3, max = 50)
     @Column(name = "nickname")
     private String nickname;
 
@@ -27,6 +30,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @Email
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 

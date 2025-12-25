@@ -20,15 +20,6 @@ public class MyMain implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        String nicknameToTest = "trainer_labubu"; // <-- Replace with the actual nickname
 
-        Optional<PersonalTrainer> trainerOptional = repository.findByNickname(nicknameToTest);
-
-        if (trainerOptional.isPresent()) {
-            PersonalTrainer trainer = trainerOptional.get();
-            logger.info("Password hash for user '{}' is: {}", nicknameToTest, trainer.getPasswordHash());
-        } else {
-            logger.warn("User with nickname '{}' not found.", nicknameToTest);
-        }
     }
 }
