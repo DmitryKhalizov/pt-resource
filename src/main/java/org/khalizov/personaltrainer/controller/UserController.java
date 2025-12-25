@@ -35,7 +35,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "Get user by id", description = "Fetching user through id")
     public UserDTO getUserById(
             @Parameter(description = "User ID", required = true, example = "1")
@@ -72,7 +72,7 @@ public class UserController {
         return userService.createUser(body);
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/{id}")
     @Operation(summary = "Update user", description = "update an existing user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User updated successfully"),
@@ -81,9 +81,25 @@ public class UserController {
     })
     public UserDTO updateUser(
             @Parameter(description = "User ID", required = true, example = "1")
-            @PathVariable Integer userId,
+            @PathVariable Integer id,
             @Valid @RequestBody UserCreateDTO body) {
-        return userService.updateUser(userId, body);
+        return userService.updateUser(id, body);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete user", description = "Delete an existing user by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    public void deleteUser(
+            @Parameter(description = "User ID", required = true, example = "1")
+            @PathVariable Integer id) {
+        if (!userService.getUserById(id).isPresent()) {
+            throw new ResourceNotFoundException("User with id " + id + " not found");
+        }
+        userService.deleteUser(id);
     }
 
 }

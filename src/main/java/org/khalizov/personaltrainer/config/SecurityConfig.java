@@ -1,4 +1,3 @@
-// java
 package org.khalizov.personaltrainer.config;
 
 import org.springframework.context.annotation.Bean;
@@ -19,7 +18,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/login/**"))
             .authorizeHttpRequests(auth -> auth
                 // Public web
                 .requestMatchers("/", "/home", "/login/**", "/oauth2/**", "/error").permitAll()
@@ -32,12 +31,22 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/trainers").permitAll()
 
+                // Allowing unauthenticated POST to trainer reports for testing
+                .requestMatchers(HttpMethod.POST, "/api/trainers/*/reports").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/trainers/*/reports").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/api/trainers/*/reports/*").permitAll()
+
+                // Temporary solution for testing deletion
+                .requestMatchers(HttpMethod.DELETE, "/api/users/**").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/users/**").permitAll()
+
                 // Admin protected
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                 // Everything else demands auth
                 .anyRequest().authenticated()
             )
+            .httpBasic(basic -> {})  // Enable HTTP Basic Auth for Swagger
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login/perform")

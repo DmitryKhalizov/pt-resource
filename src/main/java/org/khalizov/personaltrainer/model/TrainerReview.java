@@ -24,7 +24,9 @@ public class TrainerReview {
     private Integer reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false,
+            foreignKey = @ForeignKey(name = "FK_trainer_review_user",
+                    foreignKeyDefinition = "FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE"))
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

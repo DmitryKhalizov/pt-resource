@@ -8,10 +8,12 @@ import jakarta.validation.Valid;
 import org.khalizov.personaltrainer.config.CustomOAuth2User;
 import org.khalizov.personaltrainer.dto.TrainerReviewCreateDTO;
 import org.khalizov.personaltrainer.dto.TrainerReviewDTO;
+import org.khalizov.personaltrainer.model.User;
 import org.khalizov.personaltrainer.repository.UserRepository;
 import org.khalizov.personaltrainer.service.TrainerReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -45,11 +47,17 @@ public class TrainerReviewController {
             @Parameter(description = "Trainer ID", required = true, example = "1")
             @PathVariable Integer trainerId,
             @Valid @RequestBody TrainerReviewCreateDTO body,
-            @AuthenticationPrincipal Object principal) {
+            Authentication authentication) {
 
-        Integer userId = extractUserId(principal);
+        if(authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
+        }
+
+        Integer userId = extractUserId(authentication.getPrincipal());
         return service.addReview(trainerId, userId, body);
     }
+
+
 
     @DeleteMapping("/{reviewId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -65,9 +73,9 @@ public class TrainerReviewController {
             return oAuth2User.getUserId();
         } else if (principal instanceof UserDetails userDetails) {
             return userRepository.findByEmail(userDetails.getUsername())
-                    .map(u -> u.getUserId())
+                    .map(User::getUserId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
         }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
-    }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authentication type");
+}
 }

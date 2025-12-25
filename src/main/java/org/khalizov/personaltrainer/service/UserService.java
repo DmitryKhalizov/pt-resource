@@ -1,8 +1,10 @@
 package org.khalizov.personaltrainer.service;
 
+import org.hibernate.Hibernate;
 import org.khalizov.personaltrainer.dto.UserCreateDTO;
 import org.khalizov.personaltrainer.dto.UserDTO;
 import org.khalizov.personaltrainer.mapper.UserDTOMapper;
+import org.khalizov.personaltrainer.model.PersonalTrainer;
 import org.khalizov.personaltrainer.model.User;
 import org.khalizov.personaltrainer.model.UserType;
 import org.khalizov.personaltrainer.repository.UserRepository;
@@ -108,7 +110,12 @@ public class UserService {
         return userDTOMapper.apply(saved);
     }
 
+    @Transactional
     public void deleteUser(Integer id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "User with id " + id + " not found"));
+
+        userRepository.delete(user);
     }
 }

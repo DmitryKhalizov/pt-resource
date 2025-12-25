@@ -52,4 +52,7 @@ public class User {
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private Set<PersonalTrainer> trainers = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TrainerReview> reviews = new HashSet<>();
 }
