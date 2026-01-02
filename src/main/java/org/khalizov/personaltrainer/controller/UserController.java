@@ -50,7 +50,7 @@ public class UserController {
             @Parameter(description = "User nickname", required = true, example = "sleepy_joe")
             @PathVariable String nickname) {
         return userService.getUserByNickname(nickname)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found")); // correct exception? resource not found?
     }
 
     @GetMapping("/status/{status}")
@@ -66,14 +66,14 @@ public class UserController {
     @Operation(summary = "Create a new user", description = "create a new user with provided parameters")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully"),
-            @ApiResponse(responseCode = "400", description = "Ivalid input parameters")
+            @ApiResponse(responseCode = "400", description = "Invalid input parameters")
     })
     public UserDTO createUser(@Valid @RequestBody UserCreateDTO body) {
         return userService.createUser(body);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update user", description = "update an existing user")
+    @Operation(summary = "Update user", description = "Update an existing user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User updated successfully"),
             @ApiResponse(responseCode = "404", description = "User not found"),

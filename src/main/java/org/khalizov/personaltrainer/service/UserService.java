@@ -41,7 +41,6 @@ public class UserService {
     public Optional<UserDTO> getUserById(Integer id) {
         return userRepository.findById(id)
                 .map(userDTOMapper);
-
     }
 
     public Optional<UserDTO> getUserByNickname(String nickname) {
