@@ -54,7 +54,7 @@ public class PersonalTrainer {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "price_id", nullable = false, unique = true)
     private Price price;
 

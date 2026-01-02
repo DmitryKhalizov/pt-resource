@@ -32,4 +32,7 @@ public class Price {
     @Column(name = "special_price")
     private String specialPrice;
 
+    @OneToOne(mappedBy = "price", fetch = FetchType.LAZY)
+    private PersonalTrainer trainer;
+
 }
