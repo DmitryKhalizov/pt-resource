@@ -1,10 +1,8 @@
 package org.khalizov.personaltrainer.service;
 
-import org.hibernate.Hibernate;
 import org.khalizov.personaltrainer.dto.UserCreateDTO;
 import org.khalizov.personaltrainer.dto.UserDTO;
 import org.khalizov.personaltrainer.mapper.UserDTOMapper;
-import org.khalizov.personaltrainer.model.PersonalTrainer;
 import org.khalizov.personaltrainer.model.User;
 import org.khalizov.personaltrainer.model.UserType;
 import org.khalizov.personaltrainer.repository.UserRepository;
@@ -111,10 +109,16 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Integer id) {
-        User user = userRepository.findById(id)
+        var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "User with id " + id + " not found"));
 
-        userRepository.delete(user);
+        try {
+            userRepository.delete(user);
+        } catch (DataIntegrityViolationException ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Cannot delete user due to existing references (e.g., reviews). Remove related data first or use soft delete.");
+        }
     }
 }

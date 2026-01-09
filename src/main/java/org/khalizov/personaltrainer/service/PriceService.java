@@ -4,6 +4,7 @@ import org.khalizov.personaltrainer.dto.PriceCreateDTO;
 import org.khalizov.personaltrainer.dto.PriceDTO;
 import org.khalizov.personaltrainer.mapper.PriceDTOMapper;
 import org.khalizov.personaltrainer.model.Price;
+import org.khalizov.personaltrainer.model.Sport;
 import org.khalizov.personaltrainer.repository.PriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -69,80 +70,107 @@ public class PriceService {
         priceRepository.delete(price);
     }
 
-    public List<PriceDTO> findByPricePerHourBetween(BigDecimal min, BigDecimal max) {
-        return priceRepository.findByPricePerHourBetween(min, max)
-                .stream()
-                .map(priceDTOMapper)
-                .toList();
-    }
+    public List<PriceDTO> getPricesBySportEnum(Sport sport) {
 
-    public List<PriceDTO> findByPriceFiveHoursBetween(BigDecimal min, BigDecimal max) {
-        return priceRepository.findByPriceFiveHoursBetween(min, max)
-                .stream()
-                .map(priceDTOMapper)
-                .toList();
-    }
-
-    public List<PriceDTO> findByPriceTenHoursBetween(BigDecimal min, BigDecimal max) {
-        return priceRepository.findByPriceTenHoursBetween(min, max)
-                .stream()
-                .map(priceDTOMapper)
-                .toList();
-    }
-
-    public List<PriceDTO> findAllOrderByPricePerHourAsc() {
-        return priceRepository.findAllByOrderByPricePerHourAsc()
-                .stream()
-                .map(priceDTOMapper)
-                .toList();
-    }
-
-    public List<PriceDTO> findAllOrderByPricePerHourDesc() {
-        return priceRepository.findAllByOrderByPricePerHourDesc()
-                .stream()
-                .map(priceDTOMapper)
-                .toList();
-    }
-
-    public List<PriceDTO> findAllOrderByPriceFiveHoursAsc() {
-        return priceRepository.findAllByOrderByPriceFiveHoursAsc()
-                .stream()
-                .map(priceDTOMapper)
-                .toList();
-    }
-
-    public List<PriceDTO> findAllOrderByPriceFiveHoursDesc() {
-        return priceRepository.findAllByOrderByPriceFiveHoursDesc()
-                .stream()
-                .map(priceDTOMapper)
-                .toList();
-    }
-
-    public List<PriceDTO> findAllOrderByPriceTenHoursAsc() {
-        return priceRepository.findAllByOrderByPriceTenHoursAsc()
-                .stream()
-                .map(priceDTOMapper)
-                .toList();
-    }
-
-    public List<PriceDTO> findAllOrderByPriceTenHoursDesc() {
-        return priceRepository.findAllByOrderByPriceTenHoursDesc()
-                .stream()
-                .map(priceDTOMapper)
-                .toList();
-    }
-
-    public List<PriceDTO> getPricesBySport(String sport) {
         return priceRepository.findAll()
                 .stream()
-                .filter(price -> price.getTrainer() != null && sport.equalsIgnoreCase(price.getTrainer().getSport().toString()))
+                .filter(price -> price.getTrainer() != null && sport == price.getTrainer().getSport())
                 .map(priceDTOMapper)
                 .toList();
+    }
+
+    public List<PriceDTO> findByRangeAndSport(String field, BigDecimal min, BigDecimal max, Sport sport) {
+        switch (normalizeField(field)) {
+            case HOUR -> {
+                if (sport != null) {
+                    return priceRepository.findByPricePerHourBetweenAndTrainer_Sport(min, max, sport)
+                            .stream().map(priceDTOMapper).toList();
+                }
+                return priceRepository.findByPricePerHourBetween(min, max)
+                        .stream().map(priceDTOMapper).toList();
+            }
+            case FIVE -> {
+                if (sport != null) {
+                    return priceRepository.findByPriceFiveHoursBetweenAndTrainer_Sport(min, max, sport)
+                            .stream().map(priceDTOMapper).toList();
+                }
+                return priceRepository.findByPriceFiveHoursBetween(min, max)
+                        .stream().map(priceDTOMapper).toList();
+            }
+            case TEN -> {
+                if (sport != null) {
+                    return priceRepository.findByPriceTenHoursBetweenAndTrainer_Sport(min, max, sport)
+                            .stream().map(priceDTOMapper).toList();
+                }
+                return priceRepository.findByPriceTenHoursBetween(min, max)
+                        .stream().map(priceDTOMapper).toList();
+            }
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown field: " + field);
+        }
+    }
+
+    // Consolidated sort handler
+    public List<PriceDTO> findAllSortedByFieldAndSport(String field, String order, Sport sport) {
+        boolean asc = normalizeOrder(order);
+        switch (normalizeField(field)) {
+            case HOUR -> {
+                if (sport != null) {
+                    return (asc ? priceRepository.findAllByTrainer_SportOrderByPricePerHourAsc(sport)
+                            : priceRepository.findAllByTrainer_SportOrderByPricePerHourDesc(sport))
+                            .stream().map(priceDTOMapper).toList();
+                }
+                return (asc ? priceRepository.findAllByOrderByPricePerHourAsc()
+                        : priceRepository.findAllByOrderByPricePerHourDesc())
+                        .stream().map(priceDTOMapper).toList();
+            }
+            case FIVE -> {
+                if (sport != null) {
+                    return (asc ? priceRepository.findAllByTrainer_SportOrderByPriceFiveHoursAsc(sport)
+                            : priceRepository.findAllByTrainer_SportOrderByPriceFiveHoursDesc(sport))
+                            .stream().map(priceDTOMapper).toList();
+                }
+                return (asc ? priceRepository.findAllByOrderByPriceFiveHoursAsc()
+                        : priceRepository.findAllByOrderByPriceFiveHoursDesc())
+                        .stream().map(priceDTOMapper).toList();
+            }
+            case TEN -> {
+                if (sport != null) {
+                    return (asc ? priceRepository.findAllByTrainer_SportOrderByPriceTenHoursAsc(sport)
+                            : priceRepository.findAllByTrainer_SportOrderByPriceTenHoursDesc(sport))
+                            .stream().map(priceDTOMapper).toList();
+                }
+                return (asc ? priceRepository.findAllByOrderByPriceTenHoursAsc()
+                        : priceRepository.findAllByOrderByPriceTenHoursDesc())
+                        .stream().map(priceDTOMapper).toList();
+            }
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown field: " + field);
+        }
     }
 
     private Price getPriceOrThrow(Integer id) {
         return priceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Price with id " + id + " not found"));
+    }
+
+    private enum Field { HOUR, FIVE, TEN }
+
+    private Field normalizeField(String field) {
+        if (field == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "field is required");
+        return switch (field.toLowerCase()) {
+            case "hour", "perhour", "priceperhour" -> Field.HOUR;
+            case "five", "fivehours", "pricefivehours" -> Field.FIVE;
+            case "ten", "tenhours", "pricetenhours" -> Field.TEN;
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown field: " + field);
+        };
+    }
+
+    private boolean normalizeOrder(String order) {
+        if (order == null) return true; // default asc
+        return switch (order.toLowerCase()) {
+            case "asc" -> true;
+            case "desc" -> false;
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown order: " + order);
+        };
     }
 }
