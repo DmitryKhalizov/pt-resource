@@ -25,7 +25,7 @@ public class SecurityConfig {
                         // Swagger
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-                        // Temporarily allow unauthenticated GET and POST for users/trainers/locations/prices
+                        // Temporarily allow unauthenticated GET, POST and PUT for users/trainers/locations/prices
                         .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/trainers/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/locations/**").permitAll()
@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/trainers").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/locations/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/prices/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/trainers/**").permitAll()
 
                         // Allowing unauthenticated POST to trainer reports for testing
                         .requestMatchers(HttpMethod.POST, "/api/trainers/*/reports").permitAll()

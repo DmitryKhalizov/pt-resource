@@ -75,6 +75,7 @@ public class PersonalTrainerService {
         trainer.setFirstName(dto.getFirstName());
         trainer.setLastName(dto.getLastName());
         trainer.setNickname(dto.getNickname());
+        trainer.setEmail(dto.getEmail());
         trainer.setDescription(dto.getDescription());
         trainer.setSport(dto.getSport());
         trainer.setExperienceYears(dto.getExperienceYears());
@@ -148,6 +149,7 @@ public class PersonalTrainerService {
         trainer.setFirstName(dto.getFirstName());
         trainer.setLastName(dto.getLastName());
         trainer.setNickname(dto.getNickname());
+        trainer.setEmail(dto.getEmail());
         trainer.setDescription(dto.getDescription());
         trainer.setSport(dto.getSport());
         trainer.setExperienceYears(dto.getExperienceYears());

@@ -39,6 +39,11 @@ public class PersonalTrainerCreateDTO {
     @Size(min=3, max = 50)
     private String nickname;
 
+    @Schema(description = "Email for the trainer", example = "test@test.se")
+    @NotBlank
+    @Email
+    String email;
+
     @Schema(description = "Unique description for the trainer", example = "Best boxer on earth", required = true)
     @NotBlank
     @Size(min=3, max = 50)

@@ -54,6 +54,7 @@ public class PersonalTrainerDTOMapper implements Function<PersonalTrainer, Perso
                 personalTrainer.getFirstName(),
                 personalTrainer.getLastName(),
                 personalTrainer.getNickname(),
+                personalTrainer.getEmail(),
                 personalTrainer.getDescription(),
                 personalTrainer.getSport(),
                 personalTrainer.getExperienceYears(),

@@ -20,6 +20,7 @@ public class PersonalTrainerDTO {
     private String firstName;
     private String lastName;
     private String nickname;
+    private String email;
     private String description;
     private Sport sport;
     private Integer experienceYears;
