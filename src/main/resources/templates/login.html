@@ -4,25 +4,37 @@
     <title>Login - Personal Trainer</title>
 </head>
 <body>
-    <h1>Login to Personal Trainer</h1>
+<h1>Login to Personal Trainer</h1>
 
-    <div th:if="${param.error}">
-        <p style="color:red;">Invalid username or password.</p>
-    </div>
-    <div th:if="${param.logout}">
-        <p>You have been logged out.</p>
-    </div>
+<!-- Error/Success Messages -->
+<div th:if="${param.error}" style="color:red;">
+    <p>Invalid username or password.</p>
+</div>
+<div th:if="${param.logout}">
+    <p>You have been logged out.</p>
+</div>
 
-    <h2>Login with Email</h2>
-    <form method="post" th:action="@{/login/perform}">
-        <label>Email: <input type="email" name="username" required /></label><br/>
-        <label>Password: <input type="password" name="password" required /></label><br/>
-        <button type="submit">Login</button>
-    </form>
+<h2>Login with Email</h2>
+<!-- Form now posts to /login (matches SecurityConfig) -->
+<form method="post" th:action="@{/login}">
+    <!-- CSRF token (required by Spring Security) -->
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-    <h2>Or login with:</h2>
-    <a href="/oauth2/authorization/google"><button>Google</button></a>
-    <a href="/oauth2/authorization/facebook"><button>Facebook</button></a>
-    <a href="/oauth2/authorization/microsoft"><button>Microsoft</button></a>
+    <label>Email:
+        <input type="email" name="username" required /> <!-- name="username! is mandatory -->
+    </label><br/><br/>
+
+    <label>Password:
+        <input type="password" name="password" required />
+    </label><br/><br/>
+
+    <button type="submit">Login</button>
+</form>
+
+<h2>Or login with:</h2>
+<!-- Fixed: buttons inside <a> is invalid HTML -->
+<a href="/oauth2/authorization/google"><button type="button">Google</button></a>
+<a href="/oauth2/authorization/facebook"><button type="button">Facebook</button></a>
+<a href="/oauth2/authorization/microsoft"><button type="button">Microsoft</button></a>
 </body>
 </html>

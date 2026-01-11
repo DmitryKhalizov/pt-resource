@@ -55,7 +55,7 @@ public class SecurityConfig {
                 })  // Enable HTTP Basic Auth for Swagger
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .loginProcessingUrl("/login/perform")
+                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
