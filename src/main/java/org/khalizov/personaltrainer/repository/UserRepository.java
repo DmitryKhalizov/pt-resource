@@ -1,5 +1,6 @@
 package org.khalizov.personaltrainer.repository;
 
+import org.khalizov.personaltrainer.model.PersonalTrainer;
 import org.khalizov.personaltrainer.model.Status;
 import org.khalizov.personaltrainer.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByStatus(Status status);
 
     Optional<User> findByEmail(String email);
+
+    Optional<User> findByEmailIgnoreCase(String email);
 }

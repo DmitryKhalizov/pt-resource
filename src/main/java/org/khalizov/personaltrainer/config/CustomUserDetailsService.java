@@ -5,12 +5,14 @@ import org.khalizov.personaltrainer.model.User;
 import org.khalizov.personaltrainer.repository.PersonalTrainerRepository;
 import org.khalizov.personaltrainer.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private PersonalTrainerRepository personalTrainerRepository;
 
@@ -26,29 +29,22 @@ public class CustomUserDetailsService implements UserDetailsService {
         String normalizedEmail = email.trim().toLowerCase();
         System.out.println("DEBUG: searching for user " + normalizedEmail);
 
+        // Check if it's a trainer
         Optional<PersonalTrainer> trainerOptional = personalTrainerRepository.findByEmail(normalizedEmail);
-        if(trainerOptional.isPresent()) {
+        if (trainerOptional.isPresent()) {
             PersonalTrainer trainer = trainerOptional.get();
-            System.out.println("DEBUG: trainer found " + trainer.getEmail());
-            return org.springframework.security.core.userdetails.User.builder()
-                    .username(trainer.getEmail())
-                    .password(trainer.getPasswordHash())
-                    .roles("TRAINER")
-                    .build();
+            System.out.println("DEBUG: returning CustomUserDetails for TRAINER: " + trainer.getEmail());
+            return new CustomUserDetails(trainer);  // ← Use trainer constructor
         }
 
+        // Check if it's a regular user
         Optional<User> userOptional = userRepository.findByEmail(normalizedEmail);
-        if(userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
             User user = userOptional.get();
-            System.out.println("DEBUG: user found " + user.getEmail());
-            return org.springframework.security.core.userdetails.User.builder()
-                    .username(user.getEmail())
-                    .password(user.getPasswordHash())
-                    .roles(user.getUserType().name())
-                    .build();
+            System.out.println("DEBUG: returning CustomUserDetails for USER: " + user.getEmail());
+            return new CustomUserDetails(user);  // ← Use user constructor
         }
 
         throw new UsernameNotFoundException("User not found " + normalizedEmail);
-
     }
 }

@@ -1,13 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Home - Personal Trainer</title>
+    <title>Home</title>
+    <!-- Optional styling -->
+    <style>
+        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
+        .trainer { color: #007bff; font-weight: bold; }
+        .user { color: #6c757d; }
+    </style>
 </head>
 <body>
-    <h1>Welcome, <span th:text="${user?.firstName} ?: 'User'">User</span>!</h1>
-    <p>Email: <span th:text="${user?.email}">N/A</span></p>
-    <form th:action="@{/logout}" method="post">
-        <button type="submit">Logout</button>
-    </form>
+<div class="container">
+    <div th:if="${authenticated}">
+        <h1>Welcome, <span th:text="${username}"></span>!</h1>
+
+        <!-- Show user type -->
+        <p>
+            <strong>You are logged in as:</strong>
+            <span th:text="${userType}"
+                  th:class="${userType == 'Trainer' ? 'trainer' : 'user'}"></span>
+        </p>
+
+        <!-- Show sport if trainer -->
+        <th:block th:if="${userType == 'Trainer'}">
+            <p><strong>Sport:</strong> <span th:text="${sport}"></span></p>
+        </th:block>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+    <div th:if="${not authenticated}">
+        <h1>Public Home Page</h1>
+        <p th:text="${message}"></p>
+        <a href="/login">Login</a>
+    </div>
+</div>
 </body>
 </html>

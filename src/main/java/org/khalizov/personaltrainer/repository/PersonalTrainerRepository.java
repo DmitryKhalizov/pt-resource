@@ -22,4 +22,6 @@ public interface PersonalTrainerRepository extends JpaRepository<PersonalTrainer
     List<PersonalTrainer> findByStatus (Status status);
 
     Optional<PersonalTrainer> findByEmail(String email);
+
+    Optional<PersonalTrainer> findByEmailIgnoreCase(String email);
 }
