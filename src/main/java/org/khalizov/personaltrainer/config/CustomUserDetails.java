@@ -15,21 +15,18 @@ import java.util.Collections;
 public class CustomUserDetails implements UserDetails, Serializable {
 
     private final User user;
-    private final PersonalTrainer trainer; // null for regular users
+    private final PersonalTrainer trainer;
 
-    // Constructor for regular User
     public CustomUserDetails(User user) {
         this.user = user;
         this.trainer = null;
     }
 
-    // Constructor for PersonalTrainer
+
     public CustomUserDetails(PersonalTrainer trainer) {
         this.trainer = trainer;
-        this.user = null; // Will be derived below if needed
+        this.user = null;
     }
-
-    // --- Accessors ---
 
     public User getUser() {
         return user;
@@ -39,19 +36,14 @@ public class CustomUserDetails implements UserDetails, Serializable {
         return trainer;
     }
 
-    /**
-     * Returns true if this principal represents a PersonalTrainer.
-     */
+
     public boolean isTrainer() {
         return trainer != null;
     }
 
-    /**
-     * Gets the effective User (from trainer if present, else the user)
-     */
+
     public User getEffectiveUser() {
         if (trainer != null) {
-            // Assume trainer has an email → create synthetic User-like view
             User synthetic = new User();
             synthetic.setUserId(trainer.getTrainerId()); // or null
             synthetic.setFirstName(trainer.getFirstName());
@@ -59,13 +51,11 @@ public class CustomUserDetails implements UserDetails, Serializable {
             synthetic.setEmail(trainer.getEmail());
             synthetic.setPhone(trainer.getPhone());
             synthetic.setStatus(trainer.getStatus());
-            synthetic.setUserType(UserType.TRAINER); // if you have such enum
+            synthetic.setUserType(UserType.TRAINER);
             return synthetic;
         }
         return user;
     }
-
-    // --- Spring Security Contract ---
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -88,7 +78,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
     @Override
     public String getUsername() {
-        return isTrainer() ? trainer.getEmail() : user.getEmail();
+        return isTrainer() ? trainer.getNickname() : user.getNickname();
     }
 
     @Override

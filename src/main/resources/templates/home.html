@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmnls:sec="http://www.thymeleaf.org/thymeleaf-extra-springsecurity6">
 <head>
     <title>Home</title>
     <!-- Optional styling -->
@@ -29,6 +30,10 @@
         <form th:action="@{/logout}" method="post">
             <button type="submit">Logout</button>
         </form>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+        <button type="services">Other Services</button>
     </div>
 
     <div th:if="${not authenticated}">
