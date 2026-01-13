@@ -36,6 +36,10 @@
         <button type="services">Other Services</button>
     </div>
 
+    <div sec:authorize="isAuthenticated()">
+        <a href="/trainers" class="btn btn-primary">Show trainers</a>
+    </div>
+
     <div th:if="${not authenticated}">
         <h1>Public Home Page</h1>
         <p th:text="${message}"></p>
