@@ -59,7 +59,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // For simplicity: assign ROLE_USER or ROLE_TRAINER
+
         if (isTrainer()) {
             return Collections.singletonList(new SimpleGrantedAuthority("ROLE_TRAINER"));
         } else {

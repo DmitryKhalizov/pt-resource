@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         // Extra things
                         .requestMatchers("/services", "/trainers").authenticated()
+                        .requestMatchers("/trainers").hasRole("USER")
 
                         // Temporarily allow unauthenticated GET, POST and PUT for users/trainers/locations/prices
                         .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()

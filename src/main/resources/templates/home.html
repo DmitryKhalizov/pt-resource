@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmnls:sec="http://www.thymeleaf.org/thymeleaf-extra-springsecurity6">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Home</title>
     <!-- Optional styling -->
@@ -36,8 +36,8 @@
         <button type="services">Other Services</button>
     </div>
 
-    <div sec:authorize="isAuthenticated()">
-        <a href="/trainers" class="btn btn-primary">Show trainers</a>
+    <div sec:authorize="hasRole('USER')">
+        <a th:href="@{/trainers}" class="btn btn-primary">Show trainers</a>
     </div>
 
     <div th:if="${not authenticated}">
