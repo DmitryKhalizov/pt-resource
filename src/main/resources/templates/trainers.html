@@ -13,6 +13,27 @@
         <p>Welcome, <strong th:text="${username}"></strong>!</p>
     </th:block>
 
+    <!-- Sport filter -->
+    <form method="get" action="/trainers" class="row g-3 mb-3">
+        <div class="col-auto">
+            <label for="sportSelect" class="col-form-label">Filter by sport:</label>
+        </div>
+        <div class="col-auto">
+            <select id="sportSelect" name="sport" class="form-select">
+                <option value=""
+                        th:selected="${selectedSport} == null">All sports</option>
+                <option th:each="s : ${sports}"
+                        th:value="${s}"
+                        th:text="${s}"
+                        th:selected="${selectedSport} == s">
+                </option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Apply</button>
+        </div>
+    </form>
+
     <!-- Trainer list -->
     <div th:if="${trainers.empty}">
         <p>No trainers available.</p>
@@ -21,8 +42,9 @@
         <div class="card-body">
             <h5 class="card-title" th:text="${trainer.firstName} + ' ' + ${trainer.lastName}"></h5>
             <p class="card-text">
-                <strong>Nickname:</strong> <span th:text="${trainer.getNickname()}"></span><br>
-                <strong>Experience:</strong> <span th:text="${trainer.experienceYears} + ' years'"></span>
+                <strong>Nickname:</strong> <span th:text="${trainer.nickname}"></span><br>
+                <strong>Experience:</strong> <span th:text="${trainer.experienceYears} + ' years'"></span><br>
+                <strong>Sport:</strong> <span th:text="${trainer.sport}"></span>
             </p>
         </div>
     </div>

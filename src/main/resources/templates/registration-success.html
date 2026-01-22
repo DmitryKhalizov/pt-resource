@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Registration Successful</title>
+  <style>
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      text-align: center;
+      border-radius: 4px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.08);
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      color: #2c7a2c;
+      margin-bottom: 12px;
+    }
+    p {
+      margin: 6px 0;
+    }
+    .actions {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    a.button-link {
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: #3182ce;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    a.button-link.secondary {
+      background-color: #4a5568;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Registration successful</h1>
+
+  <p>Thank you for registering.</p>
+  <p>You can now continue to the home page or register another user.</p>
+
+  <div class="actions">
+    <a class="button-link" th:href="@{/}">Go to Home</a>
+    <a class="button-link secondary" th:href="@{/register}">Register another user</a>
+  </div>
+</div>
+</body>
+</html>

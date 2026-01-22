@@ -1,6 +1,7 @@
 package org.khalizov.personaltrainer.repository;
 
 import org.khalizov.personaltrainer.model.PersonalTrainer;
+import org.khalizov.personaltrainer.model.Sport;
 import org.khalizov.personaltrainer.model.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,6 @@ public interface PersonalTrainerRepository extends JpaRepository<PersonalTrainer
     Optional<PersonalTrainer> findByEmail(String email);
 
     Optional<PersonalTrainer> findByEmailIgnoreCase(String email);
+
+    List<PersonalTrainer> findBySport(Sport sport);
 }

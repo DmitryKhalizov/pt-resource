@@ -1,14 +1,11 @@
 package org.khalizov.personaltrainer.service;
 
-import org.khalizov.personaltrainer.model.Price;
+import org.khalizov.personaltrainer.model.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.khalizov.personaltrainer.dto.PersonalTrainerCreateDTO;
 import org.khalizov.personaltrainer.dto.PersonalTrainerDTO;
 import org.khalizov.personaltrainer.mapper.PersonalTrainerDTOMapper;
-import org.khalizov.personaltrainer.model.Location;
-import org.khalizov.personaltrainer.model.PersonalTrainer;
-import org.khalizov.personaltrainer.model.Status;
 import org.khalizov.personaltrainer.repository.LocationRepository;
 import org.khalizov.personaltrainer.repository.PersonalTrainerRepository;
 import org.khalizov.personaltrainer.repository.UserRepository;
@@ -174,6 +171,12 @@ public class PersonalTrainerService {
         }
 
         return personalTrainerDTOMapper.apply(personalTrainerRepository.save(trainer));
+    }
+
+    public List<PersonalTrainerDTO> getTrainersBySport(Sport sport) {
+        return personalTrainerRepository.findBySport(sport).stream()
+                .map(personalTrainerDTOMapper)
+                .toList();
     }
 
     public void deleteTrainer(Integer id) {
