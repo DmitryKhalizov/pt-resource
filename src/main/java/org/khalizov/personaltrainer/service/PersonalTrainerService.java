@@ -1,6 +1,7 @@
 package org.khalizov.personaltrainer.service;
 
 import org.khalizov.personaltrainer.model.*;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.khalizov.personaltrainer.dto.PersonalTrainerCreateDTO;
@@ -182,5 +183,21 @@ public class PersonalTrainerService {
     public void deleteTrainer(Integer id) {
 
             personalTrainerRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PersonalTrainerDTO> findAllUnsorted() {
+        return personalTrainerRepository.findAll()
+                .stream()
+                .map(personalTrainerDTOMapper)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PersonalTrainerDTO> findAllSorted(Sort sort) {
+        return personalTrainerRepository.findAll(sort)
+                .stream()
+                .map(personalTrainerDTOMapper)
+                .toList();
     }
 }

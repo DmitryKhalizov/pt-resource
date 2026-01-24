@@ -29,6 +29,8 @@ public class SecurityConfig {
                         // Public web
                         .requestMatchers("/", "/home", "/login/**", "/oauth2/**", "/error",
                                 "/register", "register/success").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/trainers/**").permitAll()
+
                         // Swagger
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         // Extra things

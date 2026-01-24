@@ -4,13 +4,29 @@
 <head>
     <title>Home</title>
     <style>
-        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
         .trainer { color: #007bff; font-weight: bold; }
         .user { color: #6c757d; }
+        .btn-link {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 14px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .trainer-list { margin-top: 24px; }
+        .trainer-item { border-bottom: 1px solid #ddd; padding: 8px 0; }
+        .trainer-header { display: flex; justify-content: space-between; gap: 16px; }
+        .sort-form { margin-top: 16px; }
+        .sort-form select { margin-right: 8px; }
     </style>
 </head>
 <body>
 <div class="container">
+
+    <!-- Auth-specific info -->
     <div th:if="${authenticated}">
         <h1>Welcome, <span th:text="${username}"></span>!</h1>
 
@@ -29,24 +45,50 @@
         </form>
     </div>
 
-    <div sec:authorize="isAuthenticated()">
-        <button type="services">Other Services</button>
-    </div>
-
-    <div sec:authorize="hasRole('USER')">
-        <a th:href="@{/trainers}" class="btn btn-primary">Show trainers</a>
-    </div>
-
     <div th:if="${not authenticated}">
         <h1>Public Home Page</h1>
         <p th:text="${message}"></p>
-        <a href="/login">Login</a>
+        <a th:href="@{/login}">Login</a>
 
-        <!-- New: User Registration button -->
         <div style="margin-top: 16px;">
             <a th:href="@{/register}" class="btn btn-secondary">User Registration</a>
         </div>
     </div>
+
+    <!-- Sorting controls & trainer list visible to everyone -->
+    <div class="sort-form">
+        <form th:action="@{/home}" method="get">
+            <label for="sort">Sort trainers by:</label>
+            <select id="sort" name="sort">
+                <option value="" th:selected="${sort == null or sort == ''}">None (unsorted)</option>
+                <option th:value="name" th:selected="${sort == 'name'}">Name</option>
+                <option th:value="sport" th:selected="${sort == 'sport'}">Sport</option>
+                <option th:value="priceAsc" th:selected="${sort == 'priceAsc'}">Price (low to high)</option>
+                <option th:value="priceDesc" th:selected="${sort == 'priceDesc'}">Price (high to low)</option>
+            </select>
+            <button type="submit">Apply</button>
+        </form>
+    </div>
+
+    <div class="trainer-list">
+        <h2>All Trainers</h2>
+        <p th:if="${#lists.isEmpty(trainers)}">No trainers available.</p>
+
+        <div th:each="trainer : ${trainers}" class="trainer-item">
+            <div class="trainer-header">
+                <span>
+                    <!-- Adjust these fields to match your PersonalTrainerDTO properties -->
+                    <strong th:text="${trainer.firstName} + ' ' + ${trainer.lastName}">Trainer Name</strong>
+                    <span th:text="' - ' + ${trainer.sport}">Sport</span>
+                </span>
+
+                <!-- Adjust this to match your DTO (example uses nested price) -->
+                <span th:if="${trainer.price != null}"
+                      th:text="${trainer.price.pricePerHour} + ' € / hour'">Price</span>
+            </div>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>

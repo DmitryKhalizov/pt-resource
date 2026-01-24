@@ -1,6 +1,10 @@
 package org.khalizov.personaltrainer.controller;
 
 import org.khalizov.personaltrainer.config.CustomUserDetails;
+import org.khalizov.personaltrainer.dto.PersonalTrainerDTO;
+import org.khalizov.personaltrainer.model.PersonalTrainer;
+import org.khalizov.personaltrainer.service.PersonalTrainerService;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -12,13 +16,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class AuthController {
 
 
+    private final PersonalTrainerService personalTrainerService;
+
+    public AuthController(PersonalTrainerService personalTrainerService) {
+        this.personalTrainerService = personalTrainerService;
+    }
+
     @GetMapping("/home")
-    public String home(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+    public String home(@AuthenticationPrincipal CustomUserDetails userDetails,
+                       @RequestParam(name = "sort", required = false) String sortParam,
+                       Model model) {
         if (userDetails != null) {
             // User is authenticated
             model.addAttribute("authenticated", true);
@@ -33,7 +48,29 @@ public class AuthController {
             model.addAttribute("authenticated", false);
             model.addAttribute("message", "Please log in to access full features.");
         }
-        return "home"; // Thymeleaf template: src/main/resources/templates/home.html
+
+        List<PersonalTrainerDTO> trainers;
+        if(sortParam == null || sortParam.isBlank()){
+            trainers = personalTrainerService.findAllUnsorted();
+        } else {
+            Sort sort = mapSortParam(sortParam);
+            trainers = personalTrainerService.findAllSorted(sort);
+        }
+
+        model.addAttribute("trainers", trainers);
+        model.addAttribute("sort", sortParam);
+
+        return "home";
+    }
+
+    private Sort mapSortParam(String sortParam) {
+        return switch (sortParam) {
+            case "name" -> Sort.by("firstName").ascending().and(Sort.by("lastName").ascending());
+            case "sport" -> Sort.by("sport").ascending();
+            case "priceAsc" -> Sort.by("price.pricePerHour").ascending();
+            case "priceDesc" -> Sort.by("price.pricePerHour").descending();
+            default -> Sort.unsorted();
+        };
     }
 
 
@@ -54,7 +91,7 @@ public class AuthController {
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response, null);
-        return "redirect:/login?logout"; // Redirect to login with logout param
+        return "redirect:/login?logout";
     }
 
 
