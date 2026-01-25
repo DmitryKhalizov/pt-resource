@@ -2,6 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
+    <style>
+        /* Unified button style (same as home) */
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            font-size: 16px;
+            line-height: 1.2;
+            border-radius: 6px;
+            border: 1px solid #007bff;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+        .btn:hover { filter: brightness(0.95); }
+        .btn:active { filter: brightness(0.9); }
+        .btn:focus { outline: 2px solid rgba(0,123,255,0.35); outline-offset: 2px; }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+    </style>
 </head>
 <body>
 <h2>Login</h2>
@@ -12,7 +35,7 @@
     <div>
         <label>Password: <input type="password" name="password" required/></label>
     </div>
-    <button type="submit">Login</button>
+    <button type="submit" class="btn">Login</button>
 </form>
 
 <!-- Show error if login failed -->
@@ -20,6 +43,6 @@
     Invalid email or password.
 </div>
 
-<a href="/home">Back to Home</a>
+<a href="/home" class="btn btn-secondary">Back to Home</a>
 </body>
 </html>

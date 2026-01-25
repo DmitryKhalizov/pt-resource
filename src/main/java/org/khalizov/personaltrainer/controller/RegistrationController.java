@@ -22,11 +22,9 @@ public class RegistrationController {
     public String showRegistrationForm(Model model) {
         UserCreateDTO dto = new UserCreateDTO();
         dto.setUserType(UserType.CLIENT);
-        dto.setUserType(UserType.TRAINER);
+        dto.setStatus(Status.ACTIVE);
 
         model.addAttribute("user", dto);
-        model.addAttribute("userTypes", UserType.values());
-        model.addAttribute("statuses", Status.values());
         return "registration";
     }
 
@@ -41,6 +39,8 @@ public class RegistrationController {
             return "registration";
         }
 
+        user.setUserType(UserType.CLIENT);
+        user.setStatus(Status.ACTIVE);
         userService.createUser(user);
         return "redirect:/registration/success";
     }

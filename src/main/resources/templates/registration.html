@@ -55,25 +55,6 @@
            th:errors="*{password}"></div>
     </div>
 
-    <!-- Optional: let user select type and status, or set defaults in controller -->
-    <div class="field">
-      <label for="userType">User type</label>
-      <select id="userType" th:field="*{userType}">
-        <option th:each="type : ${userTypes}"
-                th:value="${type}"
-                th:text="${type}"></option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="status">Status</label>
-      <select id="status" th:field="*{status}">
-        <option th:each="s : ${statuses}"
-                th:value="${s}"
-                th:text="${s}"></option>
-      </select>
-    </div>
-
     <button type="submit">Register</button>
   </form>
 

@@ -7,15 +7,29 @@
         .container { max-width: 900px; margin: 40px auto; padding: 20px; }
         .trainer { color: #007bff; font-weight: bold; }
         .user { color: #6c757d; }
-        .btn-link {
+
+        /* Unified button style */
+        .btn {
             display: inline-block;
-            margin-top: 12px;
-            padding: 8px 14px;
+            padding: 10px 18px;          /* slightly bigger */
+            font-size: 16px;             /* slightly bigger */
+            line-height: 1.2;
+            border-radius: 6px;
+            border: 1px solid #007bff;
             background-color: #007bff;
-            color: white;
+            color: #ffffff;
             text-decoration: none;
-            border-radius: 4px;
+            cursor: pointer;
+            vertical-align: middle;
         }
+        .btn:hover { filter: brightness(0.95); }
+        .btn:active { filter: brightness(0.9); }
+        .btn:focus { outline: 2px solid rgba(0,123,255,0.35); outline-offset: 2px; }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
         .trainer-list { margin-top: 24px; }
         .trainer-item { border-bottom: 1px solid #ddd; padding: 8px 0; }
         .trainer-header { display: flex; justify-content: space-between; gap: 16px; }
@@ -41,17 +55,18 @@
         </th:block>
 
         <form th:action="@{/logout}" method="post">
-            <button type="submit">Logout</button>
+            <button type="submit" class="btn btn-secondary">Logout</button>
         </form>
     </div>
 
     <div th:if="${not authenticated}">
         <h1>Public Home Page</h1>
         <p th:text="${message}"></p>
-        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/login}" class="btn">Login</a>
 
         <div style="margin-top: 16px;">
             <a th:href="@{/register}" class="btn btn-secondary">User Registration</a>
+            <a th:href="@{/register/trainer}" class="btn btn-secondary" style="margin-left: 8px;">Trainer Registration</a>
         </div>
     </div>
 
@@ -66,7 +81,7 @@
                 <option th:value="priceAsc" th:selected="${sort == 'priceAsc'}">Price (low to high)</option>
                 <option th:value="priceDesc" th:selected="${sort == 'priceDesc'}">Price (high to low)</option>
             </select>
-            <button type="submit">Apply</button>
+            <button type="submit" class="btn">Apply</button>
         </form>
     </div>
 
@@ -77,12 +92,10 @@
         <div th:each="trainer : ${trainers}" class="trainer-item">
             <div class="trainer-header">
                 <span>
-                    <!-- Adjust these fields to match your PersonalTrainerDTO properties -->
                     <strong th:text="${trainer.firstName} + ' ' + ${trainer.lastName}">Trainer Name</strong>
                     <span th:text="' - ' + ${trainer.sport}">Sport</span>
                 </span>
 
-                <!-- Adjust this to match your DTO (example uses nested price) -->
                 <span th:if="${trainer.price != null}"
                       th:text="${trainer.price.pricePerHour} + ' € / hour'">Price</span>
             </div>

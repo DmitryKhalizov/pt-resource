@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public web
                         .requestMatchers("/", "/home", "/login/**", "/oauth2/**", "/error",
-                                "/register", "register/success").permitAll()
+                                "/register/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/trainers/**").permitAll()
 
                         // Swagger

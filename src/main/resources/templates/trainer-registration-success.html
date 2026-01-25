@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Trainer Registration Success</title>
+  <style>
+    .container { max-width: 700px; margin: 40px auto; padding: 20px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Trainer registration successful</h1>
+  <p>Your trainer account has been created.</p>
+
+  <p style="margin-top: 16px;">
+    <a th:href="@{/login}">Go to Login</a> |
+    <a th:href="@{/}">Back to Home</a>
+  </p>
+</div>
+</body>
+</html>
