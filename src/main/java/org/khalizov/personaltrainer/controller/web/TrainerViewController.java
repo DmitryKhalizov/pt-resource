@@ -1,8 +1,7 @@
-package org.khalizov.personaltrainer.controller;
+package org.khalizov.personaltrainer.controller.web;
 
 import org.khalizov.personaltrainer.config.CustomUserDetails;
 import org.khalizov.personaltrainer.dto.PersonalTrainerDTO;
-import org.khalizov.personaltrainer.mapper.PersonalTrainerDTOMapper;
 import org.khalizov.personaltrainer.model.Sport;
 import org.khalizov.personaltrainer.service.PersonalTrainerService;
 import org.springframework.beans.factory.annotation.Autowired;

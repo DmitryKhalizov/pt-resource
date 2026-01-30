@@ -1,4 +1,4 @@
-package org.khalizov.personaltrainer.controller;
+package org.khalizov.personaltrainer.controller.api;
 
 import jakarta.validation.Valid;
 import org.khalizov.personaltrainer.dto.UserCreateDTO;

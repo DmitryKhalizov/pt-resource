@@ -1,12 +1,10 @@
-package org.khalizov.personaltrainer.controller;
+package org.khalizov.personaltrainer.controller.web;
 
 import org.khalizov.personaltrainer.config.CustomUserDetails;
 import org.khalizov.personaltrainer.dto.PersonalTrainerDTO;
-import org.khalizov.personaltrainer.model.PersonalTrainer;
 import org.khalizov.personaltrainer.service.PersonalTrainerService;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
