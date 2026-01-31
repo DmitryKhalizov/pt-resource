@@ -17,7 +17,10 @@ import java.math.BigDecimal;
 public class PersonalTrainerCreateDTO {
     @Schema(description = "Link to profile image of the trainer", example = "www.img.se", required = true)
     @NotBlank
-    private String profileImage;
+    private byte[] profileImage;
+
+    @Schema(description = "BLABLA")
+    private String profileImageType;
 
     @Schema(description = "Unique first name for the trainer", example = "mohammed", required = true)
     @NotBlank

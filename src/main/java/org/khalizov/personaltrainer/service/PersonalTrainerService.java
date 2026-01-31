@@ -70,6 +70,7 @@ public class PersonalTrainerService {
 
         PersonalTrainer trainer = new PersonalTrainer();
         trainer.setProfileImage(dto.getProfileImage());
+        trainer.setProfileImageType((dto.getProfileImageType()));
         trainer.setFirstName(dto.getFirstName());
         trainer.setLastName(dto.getLastName());
         trainer.setNickname(dto.getNickname());

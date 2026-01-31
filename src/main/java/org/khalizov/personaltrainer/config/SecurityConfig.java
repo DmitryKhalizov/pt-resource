@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public web
                         .requestMatchers("/", "/home", "/login/**", "/oauth2/**", "/error",
-                                "/register/**").permitAll()
+                                "/register/**", "/profile-pictures/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/trainers/**").permitAll()
 
                         // Swagger
@@ -63,8 +63,12 @@ public class SecurityConfig {
                         // Everything else demands auth
                         .anyRequest().authenticated()
                 )
+            /*
                 .httpBasic(basic -> {
-                })  // Enable HTTP Basic Auth for Swagger
+                })
+                // Enable HTTP Basic Auth for Swagger
+
+             */
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")

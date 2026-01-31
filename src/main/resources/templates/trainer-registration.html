@@ -5,28 +5,67 @@
   <style>
     .container { max-width: 700px; margin: 40px auto; padding: 20px; }
     .field { margin-bottom: 12px; }
-    label { display: block; margin-bottom: 4px; }
-    input, select, textarea { width: 100%; padding: 6px; }
-    textarea { min-height: 90px; }
-    .error { color: red; font-size: 0.9em; }
+    label { display: block; margin-bottom: 4px; font-weight: 500; }
+    input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+    textarea { min-height: 90px; resize: vertical; }
+    .error { color: #dc3545; font-size: 0.9em; margin-top: 4px; }
+    .error-banner { background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 16px; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #007bff;
+      background-color: #007bff;
+      color: #ffffff;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { filter: brightness(0.95); }
+    .btn-secondary {
+      background-color: #6c757d;
+      border-color: #6c757d;
+      margin-left: 8px;
+    }
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    .file-input-wrapper input[type="file"] {
+      cursor: pointer;
+    }
+    small { color: #666; font-size: 0.85em; display: block; margin-top: 4px; }
+    .preview-container {
+      margin-top: 8px;
+      display: none;
+    }
+    .preview-container img {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+    }
   </style>
 </head>
 <body>
 <div class="container">
   <h1>Trainer Registration</h1>
 
-  <form th:action="@{/register/trainer}" th:object="${trainer}" method="post">
+  <div th:if="${error}" class="error-banner" th:text="${error}"></div>
+
+  <form th:action="@{/register/trainer}" th:object="${trainer}" method="post" enctype="multipart/form-data">
 
     <div class="row">
       <div class="field">
-        <label for="firstName">First name</label>
+        <label for="firstName">First name *</label>
         <input id="firstName" type="text" th:field="*{firstName}" required />
         <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
       </div>
 
       <div class="field">
-        <label for="lastName">Last name</label>
+        <label for="lastName">Last name *</label>
         <input id="lastName" type="text" th:field="*{lastName}" required />
         <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
       </div>
@@ -34,47 +73,53 @@
 
     <div class="row">
       <div class="field">
-        <label for="nickname">Nickname</label>
+        <label for="nickname">Nickname *</label>
         <input id="nickname" type="text" th:field="*{nickname}" required />
         <div class="error" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></div>
       </div>
 
       <div class="field">
-        <label for="email">Email</label>
+        <label for="email">Email *</label>
         <input id="email" type="email" th:field="*{email}" required />
         <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
       </div>
     </div>
 
     <div class="field">
-      <label for="password">Password</label>
+      <label for="password">Password *</label>
       <input id="password" type="password" th:field="*{password}" required />
       <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
     </div>
 
     <div class="field">
-      <label for="profileImage">Profile image URL</label>
-      <input id="profileImage" type="text" th:field="*{profileImage}" required />
-      <div class="error" th:if="${#fields.hasErrors('profileImage')}" th:errors="*{profileImage}"></div>
+      <label for="profileImageFile">Profile Picture</label>
+      <div class="file-input-wrapper">
+        <input id="profileImageFile" type="file" name="profileImageFile" accept="image/*" onchange="previewImage(event)" />
+      </div>
+      <small>Max size: 5MB. Supported formats: JPEG, PNG, GIF, WebP</small>
+      <div id="imagePreview" class="preview-container">
+        <img id="preview" src="" alt="Preview" />
+      </div>
     </div>
 
     <div class="field">
-      <label for="description">Description</label>
-      <textarea id="description" th:field="*{description}" required></textarea>
+      <label for="description">Description *</label>
+      <textarea id="description" th:field="*{description}" required placeholder="Tell clients about your experience and approach..."></textarea>
       <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
     </div>
 
     <div class="row">
       <div class="field">
-        <label for="sport">Sport</label>
-        <select id="sport" th:field="*{sport}">
-          <option value="" selected>-- Select sport --</option>
+        <label for="sport">Sport *</label>
+        <select id="sport" th:field="*{sport}" required>
+          <option value="">-- Select sport --</option>
           <option th:each="s : ${sports}" th:value="${s}" th:text="${s}"></option>
         </select>
+        <div class="error" th:if="${#fields.hasErrors('sport')}" th:errors="*{sport}"></div>
       </div>
 
       <div class="field">
-        <label for="experienceYears">Experience (years)</label>
+        <label for="experienceYears">Experience (years) *</label>
         <input id="experienceYears" type="number" min="0" max="60" th:field="*{experienceYears}" required />
         <div class="error" th:if="${#fields.hasErrors('experienceYears')}" th:errors="*{experienceYears}"></div>
       </div>
@@ -82,13 +127,13 @@
 
     <div class="row">
       <div class="field">
-        <label for="pricePerHour">Price per hour</label>
+        <label for="pricePerHour">Price per hour (€) *</label>
         <input id="pricePerHour" type="number" step="0.01" min="0" th:field="*{pricePerHour}" required />
         <div class="error" th:if="${#fields.hasErrors('pricePerHour')}" th:errors="*{pricePerHour}"></div>
       </div>
 
       <div class="field">
-        <label for="priceFiveHours">Price (5 hours)</label>
+        <label for="priceFiveHours">Price (5 hours) (€) *</label>
         <input id="priceFiveHours" type="number" step="0.01" min="0" th:field="*{priceFiveHours}" required />
         <div class="error" th:if="${#fields.hasErrors('priceFiveHours')}" th:errors="*{priceFiveHours}"></div>
       </div>
@@ -96,28 +141,47 @@
 
     <div class="row">
       <div class="field">
-        <label for="priceTenHours">Price (10 hours)</label>
+        <label for="priceTenHours">Price (10 hours) (€) *</label>
         <input id="priceTenHours" type="number" step="0.01" min="0" th:field="*{priceTenHours}" required />
         <div class="error" th:if="${#fields.hasErrors('priceTenHours')}" th:errors="*{priceTenHours}"></div>
       </div>
 
       <div class="field">
-        <label for="specialPrice">Special price (optional)</label>
-        <input id="specialPrice" type="text" th:field="*{specialPrice}" />
+        <label for="specialPrice">Special price</label>
+        <input id="specialPrice" type="text" th:field="*{specialPrice}" placeholder="e.g., 10% off for groups" />
       </div>
     </div>
 
     <div class="field">
       <label for="locationId">Location ID (optional)</label>
       <input id="locationId" type="number" min="1" th:field="*{locationId}" />
+      <small>If you have a specific location, enter its ID</small>
     </div>
 
-    <button type="submit">Register as Trainer</button>
+    <div style="margin-top: 20px;">
+      <button type="submit" class="btn">Register as Trainer</button>
+      <a th:href="@{/}" class="btn btn-secondary">Cancel</a>
+    </div>
   </form>
-
-  <p style="margin-top: 16px;">
-    <a th:href="@{/}">Back to Home</a>
-  </p>
 </div>
+
+<script>
+  function previewImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('preview');
+    const previewContainer = document.getElementById('imagePreview');
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        previewContainer.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewContainer.style.display = 'none';
+    }
+  }
+</script>
 </body>
 </html>

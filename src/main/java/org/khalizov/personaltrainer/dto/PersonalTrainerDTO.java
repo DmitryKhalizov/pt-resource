@@ -16,7 +16,8 @@ import java.util.Set;
 @Schema(description = "Personal Trainer data")
 public class PersonalTrainerDTO {
     private Integer trainerId;
-    private String profileImage;
+    private byte[] profileImage;
+    private String profileImageType;
     private String firstName;
     private String lastName;
     private String nickname;

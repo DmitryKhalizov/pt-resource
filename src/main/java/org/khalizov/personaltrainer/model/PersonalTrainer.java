@@ -24,8 +24,11 @@ public class PersonalTrainer {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "profile_image")
-    private String profileImage;
+    @Column(name = "profile_image", columnDefinition = "LONGBLOB")
+    private byte[] profileImage;
+
+    @Column(name = "profile_image_type")
+    private String profileImageType;
 
     @Column(name = "first_name")
     private String firstName;
