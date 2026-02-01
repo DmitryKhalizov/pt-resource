@@ -154,7 +154,8 @@
         </div>
     </div>
 
-    <div class="sort-section">
+    <!-- Hide sort section when logged in as trainer -->
+    <div th:if="${not authenticated or userType != 'Trainer'}" class="sort-section">
         <form class="sort-form" th:action="@{/home}" method="get">
             <label for="sort">Sort trainers by:</label>
             <select id="sort" name="sort">
@@ -168,7 +169,8 @@
         </form>
     </div>
 
-    <div class="trainer-list">
+    <!-- Hide trainer list when logged in as trainer -->
+    <div th:if="${not authenticated or userType != 'Trainer'}" class="trainer-list">
         <h2>All Trainers</h2>
 
         <div th:if="${#lists.isEmpty(trainers)}" class="empty-state">
@@ -180,17 +182,16 @@
                 <div class="trainer-info">
                     <div th:if="${trainer.profileImage != null}">
                         <img th:src="@{'/profile-pictures/' + ${trainer.trainerId}}"
-                             alt="Profile"
-                             class="trainer-avatar"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                        <div class="trainer-avatar-placeholder" style="display: none;"
-                             th:text="${#strings.substring(trainer.firstName, 0, 1)}">T</div>
+                             alt="Profile picture"
+                             class="trainer-avatar" />
                     </div>
                     <div th:if="${trainer.profileImage == null}" class="trainer-avatar-placeholder"
-                         th:text="${#strings.substring(trainer.firstName, 0, 1)}">T</div>
+                         th:text="${#strings.substring(trainer.firstName, 0, 1) + #strings.substring(trainer.lastName, 0, 1)}">
+                    </div>
 
                     <div class="trainer-details">
-                        <div class="trainer-name" th:text="${trainer.firstName} + ' ' + ${trainer.lastName}">Trainer Name</div>
+                        <div class="trainer-name"
+                             th:text="${trainer.firstName + ' ' + trainer.lastName}">Trainer Name</div>
                         <div class="trainer-sport" th:text="${trainer.sport}">Sport</div>
                     </div>
                 </div>
