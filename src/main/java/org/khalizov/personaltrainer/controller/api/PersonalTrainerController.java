@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.khalizov.personaltrainer.dto.PersonalTrainerCreateDTO;
 import org.khalizov.personaltrainer.dto.PersonalTrainerDTO;
+import org.khalizov.personaltrainer.dto.PersonalTrainerUpdateDTO;
 import org.khalizov.personaltrainer.mapper.PersonalTrainerDTOMapper;
 import org.khalizov.personaltrainer.model.Status;
 import org.khalizov.personaltrainer.service.PersonalTrainerService;
@@ -101,7 +102,7 @@ public class PersonalTrainerController {
     public PersonalTrainerDTO updateTrainer(
             @Parameter(description = "Trainer ID", required = true, example = "1")
             @PathVariable Integer trainerId,
-            @Valid @RequestBody PersonalTrainerCreateDTO body) {
+            @Valid @RequestBody PersonalTrainerUpdateDTO body) {
         return personalTrainerService.updateTrainer(trainerId, body);
     }
 

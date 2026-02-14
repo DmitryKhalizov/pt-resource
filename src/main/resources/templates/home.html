@@ -136,10 +136,16 @@
             </th:block>
 
             <div class="actions">
+                <th:block th:if="${userType == 'Trainer'}">
+                    <a th:href="@{/trainers/{trainerId}/edit(trainerId=${trainerId})}" class="btn">Edit Profile</a>
+                </th:block>
+
                 <form th:action="@{/logout}" method="post" style="display: inline;">
                     <button type="submit" class="btn btn-secondary">Logout</button>
                 </form>
             </div>
+
+
         </div>
 
         <div th:if="${not authenticated}">

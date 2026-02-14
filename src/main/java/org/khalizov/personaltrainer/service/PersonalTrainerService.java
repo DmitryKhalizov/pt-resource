@@ -1,5 +1,6 @@
 package org.khalizov.personaltrainer.service;
 
+import org.khalizov.personaltrainer.dto.PersonalTrainerUpdateDTO;
 import org.khalizov.personaltrainer.model.*;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -131,38 +132,50 @@ public class PersonalTrainerService {
     }
 
     @Transactional
-    public PersonalTrainerDTO updateTrainer(Integer trainerId, PersonalTrainerCreateDTO dto) {
+    public PersonalTrainerDTO updateTrainer(Integer trainerId, PersonalTrainerUpdateDTO dto) {
         PersonalTrainer trainer = personalTrainerRepository.findById(trainerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Trainer with id " + trainerId + " not found"));
 
-        if (!trainer.getNickname().equals(dto.getNickname())) {
-            personalTrainerRepository.findByNickname(dto.getNickname())
-                    .ifPresent(existingTrainer -> {
-                        if (!existingTrainer.getTrainerId().equals(trainerId)) {
-                            throw new ResponseStatusException(HttpStatus.CONFLICT, "Nickname already exists");
-                        }
-                    });
+        if (dto.getProfileImage() != null) {
+            trainer.setProfileImage(dto.getProfileImage());
+            trainer.setProfileImageType(dto.getProfileImageType());
         }
-        trainer.setProfileImage(dto.getProfileImage());
-        trainer.setFirstName(dto.getFirstName());
-        trainer.setLastName(dto.getLastName());
-        trainer.setNickname(dto.getNickname());
-        trainer.setEmail(dto.getEmail());
-        trainer.setDescription(dto.getDescription());
-        trainer.setSport(dto.getSport());
-        trainer.setExperienceYears(dto.getExperienceYears());
-        trainer.setStatus(dto.getStatus());
+        if (dto.getFirstName() != null) {
+            trainer.setFirstName(dto.getFirstName());
+        }
+        if (dto.getLastName() != null) {
+            trainer.setLastName(dto.getLastName());
+        }
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            trainer.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
+        }
+        if (dto.getNickname() != null) {
+            if (!trainer.getNickname().equals(dto.getNickname())) {
+                personalTrainerRepository.findByNickname(dto.getNickname())
+                        .ifPresent(existingTrainer -> {
+                            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                                    "Nickname already exists");
+                        });
+            }
+            trainer.setNickname(dto.getNickname());
+        }
+        if (dto.getEmail() != null) {
+            trainer.setEmail(dto.getEmail());
+        }
+        if (dto.getDescription() != null) {
+            trainer.setDescription(dto.getDescription());
+        }
+        if (dto.getSport() != null) {
+            trainer.setSport(dto.getSport());
+        }
+        if (dto.getExperienceYears() != null) {
+            trainer.setExperienceYears(dto.getExperienceYears());
+        }
+        if (dto.getStatus() != null) {
+            trainer.setStatus(dto.getStatus());
+        }
 
-        Price price = trainer.getPrice();
-        if (price == null) {
-            price = new Price();
-            trainer.setPrice(price);
-        }
-        price.setPricePerHour(dto.getPricePerHour());
-        price.setPriceFiveHours(dto.getPriceFiveHours());
-        price.setPriceTenHours(dto.getPriceTenHours());
-        price.setSpecialPrice(dto.getSpecialPrice());
 
         if (dto.getLocationId() != null) {
             Location location = locationRepository.findById(dto.getLocationId())
@@ -172,7 +185,25 @@ public class PersonalTrainerService {
             trainer.getLocations().add(location);
         }
 
-        return personalTrainerDTOMapper.apply(personalTrainerRepository.save(trainer));
+
+        Price price = trainer.getPrice();
+        if (price != null) {
+            if (dto.getPricePerHour() != null) {
+                price.setPricePerHour(dto.getPricePerHour());
+            }
+            if (dto.getPriceFiveHours() != null) {
+                price.setPriceFiveHours(dto.getPriceFiveHours());
+            }
+            if (dto.getPriceTenHours() != null) {
+                price.setPriceTenHours(dto.getPriceTenHours());
+            }
+            if (dto.getSpecialPrice() != null) {
+                price.setSpecialPrice(dto.getSpecialPrice());
+            }
+        }
+
+        PersonalTrainer saved = personalTrainerRepository.save(trainer);
+        return personalTrainerDTOMapper.apply(saved);
     }
 
     public List<PersonalTrainerDTO> getTrainersBySport(Sport sport) {

@@ -29,34 +29,38 @@ public class AuthController {
     }
 
     @GetMapping("/home")
-    public String home(@AuthenticationPrincipal CustomUserDetails userDetails,
-                       @RequestParam(name = "sort", required = false) String sortParam,
-                       Model model) {
-        if (userDetails != null) {
-            // User is authenticated
-            model.addAttribute("authenticated", true);
-            model.addAttribute("username", userDetails.getUsername());
-            model.addAttribute("userType", userDetails.isTrainer() ? "Trainer" : "User");
-            // Add other user-specific data as needed
-            if (userDetails.isTrainer()) {
-                model.addAttribute("sport", userDetails.getTrainer().getSport());
-            }
-        } else {
-            // Unauthenticated user
-            model.addAttribute("authenticated", false);
-            model.addAttribute("message", "Please log in to access full features.");
-        }
-
+    public String home(Model model,
+                       @AuthenticationPrincipal CustomUserDetails userDetails,
+                       @RequestParam(value = "sort", required = false) String sort) {
         List<PersonalTrainerDTO> trainers;
-        if(sortParam == null || sortParam.isBlank()){
-            trainers = personalTrainerService.findAllUnsorted();
+        if (sort != null && !sort.isEmpty()) {
+            Sort sortOrder = switch (sort) {
+                case "name" -> Sort.by("firstName").ascending();
+                case "sport" -> Sort.by("sport").ascending();
+                case "priceAsc" -> Sort.by("price.pricePerHour").ascending();
+                case "priceDesc" -> Sort.by("price.pricePerHour").descending();
+                default -> Sort.unsorted();
+            };
+            trainers = personalTrainerService.findAllSorted(sortOrder);
         } else {
-            Sort sort = mapSortParam(sortParam);
-            trainers = personalTrainerService.findAllSorted(sort);
+            trainers = personalTrainerService.findAllUnsorted();
         }
 
         model.addAttribute("trainers", trainers);
-        model.addAttribute("sort", sortParam);
+        model.addAttribute("sort", sort);
+
+        boolean authenticated = userDetails != null;
+        model.addAttribute("authenticated", authenticated);
+
+        if (authenticated) {
+            model.addAttribute("username", userDetails.getUsername());
+            model.addAttribute("userType", userDetails.isTrainer() ? "Trainer" : "User");
+
+            if (userDetails.isTrainer()) {
+                model.addAttribute("sport", userDetails.getTrainer().getSport());
+                model.addAttribute("trainerId", userDetails.getTrainer().getTrainerId());
+            }
+        }
 
         return "home";
     }
