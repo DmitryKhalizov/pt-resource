@@ -15,11 +15,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Schema(description = "Personal Trainer creation request")
 public class PersonalTrainerCreateDTO {
-    @Schema(description = "Link to profile image of the trainer", example = "www.img.se", required = true)
-    @NotBlank
+    @Schema(description = "Profile image bytes", required = true)
     private byte[] profileImage;
 
-    @Schema(description = "BLABLA")
+    @Schema(description = "Profile image MIME type (e.g. image/jpeg")
     private String profileImageType;
 
     @Schema(description = "Unique first name for the trainer", example = "mohammed", required = true)
