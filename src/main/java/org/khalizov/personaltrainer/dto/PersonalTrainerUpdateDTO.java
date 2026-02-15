@@ -33,7 +33,7 @@ public class PersonalTrainerUpdateDTO {
     private String lastName;
 
     @Schema(description = "Password (optional, re-enter to change)", example = "newpassword123")
-    @Size(min = 8, max = 100)
+    @Pattern(regexp = "^$|.{8,100}", message = "Password must be empty or between 8 and 100 characters")
     private String password;
 
     @Schema(description = "Nickname (optional)", example = "johndoe")

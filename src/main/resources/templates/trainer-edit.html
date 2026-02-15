@@ -87,7 +87,7 @@
 
     <div class="field">
       <label for="password">Password (leave blank to keep current)</label>
-      <input id="password" type="password" th:field="*{password}" />
+      <input id="password" type="password" th:field="*{password}" minlength="8" maxlength="100" />
       <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
     </div>
 
