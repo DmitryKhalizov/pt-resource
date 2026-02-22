@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Edit User Profile</title>
+  <style>
+    .container { max-width: 700px; margin: 40px auto; padding: 20px; }
+    .field { margin-bottom: 12px; }
+    label { display: block; margin-bottom: 4px; font-weight: 500; }
+    input, select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+    .error { color: #dc3545; font-size: 0.9em; margin-top: 4px; }
+    .error-banner { background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 16px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #007bff;
+      background-color: #007bff;
+      color: #ffffff;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { filter: brightness(0.95); }
+    .btn-secondary {
+      background-color: #6c757d;
+      border-color: #6c757d;
+      margin-left: 8px;
+    }
+    small { color: #666; font-size: 0.85em; display: block; margin-top: 4px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Edit User Profile</h1>
+
+  <div th:if="${error}" class="error-banner" th:text="${error}"></div>
+
+  <form th:action="@{'/users/' + ${user.userId} + '/edit'}" th:object="${user}" method="post">
+
+    <div class="row">
+      <div class="field">
+        <label for="nickname">Nickname</label>
+        <input id="nickname" type="text" th:field="*{nickname}" />
+        <div class="error" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></div>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" th:field="*{email}" />
+        <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="firstName">First name</label>
+        <input id="firstName" type="text" th:field="*{firstName}" />
+        <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+      </div>
+      <div class="field">
+        <label for="lastName">Last name</label>
+        <input id="lastName" type="text" th:field="*{lastName}" />
+        <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password">Password (leave blank to keep current)</label>
+      <input id="password" type="password" th:field="*{password}" minlength="3" maxlength="100" />
+      <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    </div>
+
+    <div class="field">
+      <label for="phone">Phone</label>
+      <input id="phone" type="text" th:field="*{phone}" maxlength="30" />
+      <div class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="status">Status</label>
+        <select id="status" th:field="*{status}">
+          <option value="">-- Select status --</option>
+          <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${user.status} == s"></option>
+        </select>
+        <div class="error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
+      </div>
+      <div class="field">
+        <label for="userType">User Type</label>
+        <select id="userType" th:field="*{userType}">
+          <option value="">-- Select type --</option>
+          <option th:each="t : ${userTypes}" th:value="${t}" th:text="${t}" th:selected="${user.userType} == t"></option>
+        </select>
+        <div class="error" th:if="${#fields.hasErrors('userType')}" th:errors="*{userType}"></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <button type="submit" class="btn">Update Profile</button>
+      <a th:href="@{/home}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+</body>
+</html>

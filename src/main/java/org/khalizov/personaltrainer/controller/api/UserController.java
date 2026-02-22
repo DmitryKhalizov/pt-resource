@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.khalizov.personaltrainer.dto.UserCreateDTO;
 import org.khalizov.personaltrainer.dto.UserDTO;
+import org.khalizov.personaltrainer.dto.UserUpdateDTO;
 import org.khalizov.personaltrainer.exception.ResourceNotFoundException;
 import org.khalizov.personaltrainer.mapper.UserDTOMapper;
 import org.khalizov.personaltrainer.model.Status;
@@ -50,7 +51,7 @@ public class UserController {
             @Parameter(description = "User nickname", required = true, example = "sleepy_joe")
             @PathVariable String nickname) {
         return userService.getUserByNickname(nickname)
-                .orElseThrow(() -> new RuntimeException("User not found")); // correct exception? resource not found?
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @GetMapping("/status/{status}")
@@ -82,7 +83,7 @@ public class UserController {
     public UserDTO updateUser(
             @Parameter(description = "User ID", required = true, example = "1")
             @PathVariable Integer id,
-            @Valid @RequestBody UserCreateDTO body) {
+            @Valid @RequestBody UserUpdateDTO body) {
         return userService.updateUser(id, body);
     }
 

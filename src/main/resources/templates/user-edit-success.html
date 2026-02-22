@@ -1,0 +1,66 @@
+<!-- html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Profile Updated</title>
+  <style>
+    .container { max-width: 700px; margin: 40px auto; padding: 20px; }
+    .field { margin-bottom: 12px; }
+    label { display: block; margin-bottom: 4px; font-weight: 600; color:#333; }
+    .value { padding: 8px; background:#f7f7f7; border-radius:4px; }
+    .btn { display:inline-block; padding:10px 16px; background:#007bff; color:white; border-radius:6px; text-decoration:none; margin-right:8px; }
+    .btn-secondary { background:#6c757d; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Profile Updated</h1>
+  <p>Your profile has been saved successfully. Current details:</p>
+
+  <div class="field">
+    <label>ID</label>
+    <div class="value" th:text="${user.userId}">1</div>
+  </div>
+
+  <div class="field">
+    <label>Nickname</label>
+    <div class="value" th:text="${user.nickname}">nickname</div>
+  </div>
+
+  <div class="field">
+    <label>Email</label>
+    <div class="value" th:text="${user.email}">email@example.com</div>
+  </div>
+
+  <div class="field">
+    <label>First name</label>
+    <div class="value" th:text="${user.firstName}">First</div>
+  </div>
+
+  <div class="field">
+    <label>Last name</label>
+    <div class="value" th:text="${user.lastName}">Last</div>
+  </div>
+
+  <div class="field">
+    <label>Phone</label>
+    <div class="value" th:text="${user.phone}">12345</div>
+  </div>
+
+  <div class="field">
+    <label>Status</label>
+    <div class="value" th:text="${user.status}">ACTIVE</div>
+  </div>
+
+  <div class="field">
+    <label>User type</label>
+    <div class="value" th:text="${user.userType}">CLIENT</div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <a th:href="@{/users/{userId}/edit(userId=${user.userId})}" class="btn">Edit Again</a>
+    <a th:href="@{/home}" class="btn btn-secondary">Back to Home</a>
+  </div>
+</div>
+</body>
+</html>

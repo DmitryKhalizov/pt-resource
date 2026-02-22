@@ -33,6 +33,7 @@
         }
 
         .actions { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .top-nav { display: flex; gap: 8px; margin-top: 12px; }
 
         .sort-section {
             background-color: #ffffff;
@@ -115,6 +116,7 @@
         @media (max-width: 768px) {
             .trainer-header { flex-direction: column; align-items: flex-start; }
             .trainer-price { align-self: flex-start; }
+            .top-nav { flex-wrap: wrap; }
         }
     </style>
 </head>
@@ -122,6 +124,12 @@
 <div class="container">
 
     <div class="header">
+        <!-- Always visible navigation links -->
+        <div class="top-nav">
+            <a th:href="@{/trainers}" class="btn">Trainers</a>
+            <a th:href="@{/services}" class="btn btn-secondary">Services</a>
+        </div>
+
         <div th:if="${authenticated}">
             <h1>Welcome, <span th:text="${username}"></span>!</h1>
 
@@ -140,12 +148,13 @@
                     <a th:href="@{/trainers/{trainerId}/edit(trainerId=${trainerId})}" class="btn">Edit Profile</a>
                 </th:block>
 
+                <!-- Update Profile visible for any authenticated user -->
+                <a th:href="@{/users/{userId}/edit(userId=${#authentication.principal.effectiveUser.userId})}" class="btn">Update Profile</a>
+
                 <form th:action="@{/logout}" method="post" style="display: inline;">
                     <button type="submit" class="btn btn-secondary">Logout</button>
                 </form>
             </div>
-
-
         </div>
 
         <div th:if="${not authenticated}">
