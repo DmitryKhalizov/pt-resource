@@ -8,6 +8,7 @@ import org.khalizov.personaltrainer.model.PersonalTrainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -17,54 +18,47 @@ import java.util.stream.Collectors;
 public class PersonalTrainerDTOMapper implements Function<PersonalTrainer, PersonalTrainerDTO> {
 
     @Autowired
-    private TrainerReviewDTOMapper reviewMapper;
+    private TrainerReviewDTOMapper trainerReviewDTOMapper;
+    @Autowired
+    private LocationDTOMapper locationDTOMapper;
+    @Autowired
+    private PriceDTOMapper priceDTOMapper;
 
     @Override
-    public PersonalTrainerDTO apply(PersonalTrainer personalTrainer) {
-        Set<LocationDTO> locationDTOs = personalTrainer.getLocations()
-                .stream()
-                .map(location -> new LocationDTO(
-                        location.getLocationId(),
-                        location.getAddress(),
-                        location.getCity(),
-                        null,
-                        location.getName()
-                ))
-                .collect(Collectors.toSet());
+    public PersonalTrainerDTO apply(PersonalTrainer trainer) {
+        Set<LocationDTO> locations = trainer.getLocations() != null
+                ? trainer.getLocations().stream()
+                .map(locationDTOMapper)
+                .collect(Collectors.toSet())
+                : new HashSet<>();
 
-        PriceDTO priceDTO = null;
-        if(personalTrainer.getPrice() != null) {
-            priceDTO = new PriceDTO(
-                    personalTrainer.getPrice().getPriceId(),
-                    personalTrainer.getPrice().getPricePerHour(),
-                    personalTrainer.getPrice().getPriceFiveHours(),
-                    personalTrainer.getPrice().getPriceTenHours(),
-                    personalTrainer.getPrice().getSpecialPrice()
-            );
-        }
+        Set<TrainerReviewDTO> reviews = trainer.getReports() != null
+                ? trainer.getReports().stream()
+                .map(trainerReviewDTOMapper)
+                .collect(Collectors.toSet())
+                : new HashSet<>();
 
-        Set<TrainerReviewDTO> reviewDTOs = personalTrainer.getReports()
-                .stream()
-                .map(reviewMapper)
-                .collect(Collectors.toSet());
+        PriceDTO priceDTO = trainer.getPrice() != null
+                ? priceDTOMapper.apply(trainer.getPrice())
+                : null;
 
         PersonalTrainerDTO dto = new PersonalTrainerDTO(
-                personalTrainer.getTrainerId(),
-                personalTrainer.getProfileImage(),
-                personalTrainer.getProfileImageType(),
-                personalTrainer.getFirstName(),
-                personalTrainer.getLastName(),
-                personalTrainer.getNickname(),
-                personalTrainer.getEmail(),
-                personalTrainer.getDescription(),
-                personalTrainer.getSport(),
-                personalTrainer.getExperienceYears(),
-                personalTrainer.getStatus(),
-                locationDTOs,
+                trainer.getTrainerId(),
+                trainer.getProfileImage(),
+                trainer.getProfileImageType(),
+                trainer.getFirstName(),
+                trainer.getLastName(),
+                trainer.getNickname(),
+                trainer.getEmail(),
+                trainer.getDescription(),
+                trainer.getSport(),
+                trainer.getExperienceYears(),
+                trainer.getStatus(),
+                locations,
                 priceDTO,
-                reviewDTOs
+                reviews
         );
+
         return dto;
     }
-
 }

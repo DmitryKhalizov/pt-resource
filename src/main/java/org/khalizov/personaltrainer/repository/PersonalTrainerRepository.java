@@ -14,7 +14,7 @@ public interface PersonalTrainerRepository extends JpaRepository<PersonalTrainer
             "LEFT JOIN FETCH p.locations " +
             "LEFT JOIN FETCH p.users " +
             "LEFT JOIN FETCH p.reports " +
-            "LEFT JOIN FETCH p.sports")
+            "LEFT JOIN FETCH p.price")
     List<PersonalTrainer> findAllWithCollections();
 
 

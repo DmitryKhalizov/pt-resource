@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"users", "locations", "reports", "sports", "price"})
+@ToString(exclude = {"users", "locations", "reports", "price"})
 public class PersonalTrainer {
 
     @Id
@@ -80,12 +80,6 @@ public class PersonalTrainer {
     @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<TrainerReview> reports = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "trainer_sports",
-            joinColumns = @JoinColumn(name = "trainer_id"),
-            inverseJoinColumns = @JoinColumn(name = "sport_id")
-    )
-    private Set<Sports> sports = new HashSet<>();
+
 
 }
