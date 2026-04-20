@@ -75,11 +75,9 @@ public class AuthController {
         };
     }
 
-
     @GetMapping("/login")
     public String login(Model model) {
-        // Optional: add error messages or custom login UI logic
-        return "login"; // Template: login.html
+        return "login"; //
     }
 
 
@@ -96,6 +94,10 @@ public class AuthController {
         return "redirect:/login?logout";
     }
 
+    @GetMapping("/services")
+    public String services(){
+        return "services";
+    }
 
     @GetMapping("/")
     public String root() {

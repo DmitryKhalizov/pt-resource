@@ -124,11 +124,11 @@
 <div class="container">
 
     <div class="header">
-        <!-- Always visible navigation links -->
-        <div class="top-nav">
-            <a th:href="@{/trainers}" class="btn">Trainers</a>
-            <a th:href="@{/services}" class="btn btn-secondary">Services</a>
-        </div>
+       <!-- Navigation links - hide when logged in as trainer -->
+<div class="top-nav" th:if="${not authenticated or userType != 'Trainer'}">
+    <a th:href="@{/trainers}" class="btn">Trainers</a>
+    <a th:href="@{/services}" class="btn btn-secondary">Services</a>
+</div>
 
         <div th:if="${authenticated}">
             <h1>Welcome, <span th:text="${username}"></span>!</h1>
@@ -144,17 +144,19 @@
             </th:block>
 
             <div class="actions">
-                <th:block th:if="${userType == 'Trainer'}">
-                    <a th:href="@{/trainers/{trainerId}/edit(trainerId=${trainerId})}" class="btn">Edit Profile</a>
-                </th:block>
+    <th:block th:if="${userType == 'Trainer'}">
+        <a th:href="@{/trainers/{trainerId}/edit(trainerId=${trainerId})}" class="btn">Edit Profile</a>
+    </th:block>
 
-                <!-- Update Profile visible for any authenticated user -->
-                <a th:href="@{/users/{userId}/edit(userId=${#authentication.principal.effectiveUser.userId})}" class="btn">Update Profile</a>
+    <!-- Update Profile visible only for regular users, not trainers -->
+    <th:block th:if="${userType != 'Trainer'}">
+        <a th:href="@{/users/{userId}/edit(userId=${#authentication.principal.effectiveUser.userId})}" class="btn">Update Profile</a>
+    </th:block>
 
-                <form th:action="@{/logout}" method="post" style="display: inline;">
-                    <button type="submit" class="btn btn-secondary">Logout</button>
-                </form>
-            </div>
+    <form th:action="@{/logout}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-secondary">Logout</button>
+    </form>
+</div>
         </div>
 
         <div th:if="${not authenticated}">
